@@ -1,0 +1,39 @@
+﻿spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/mental_health_assistant?useSSL=false&serverTimezone=UTC
+    username: root
+    password: ${DB_PASSWORD}   # 数据库密码，请填写后再启动
+
+  ai:
+    openai:
+      base-url: https://dashscope.aliyuncs.com/compatible-mode/v1   # 阿里云百炼公共 endpoint；替换为你账号专属的 /compatible-mode/v1 网关地址
+      api-key: ${OPENAI_API_KEY}   # 阿里云百炼 API Key，请填写后再启动
+      chat:
+        completions-path: /chat/completions
+        options:
+          model: glm-5.3
+          temperature: 0.7
+# 服务器配置
+server:
+  port: 1236
+
+# JWT配置
+jwt:
+  secret: ${JWT_SECRET}   # JWT 签名秘钥，请填写后再启动
+  expiration: 86400000  # 24小时（毫秒）
+  refresh-expiration: 604800000  # 7天（毫秒）
+  header: Authorization  # token头部名称
+  token-prefix: "Bearer "  # token前缀
+
+# RAG配置
+rag:
+  boundary-file: ../system_boundary.md  # 安全与行为约束文档（项目根目录）
+  folder: ../rag-knowledge  # 本地知识库文件夹（项目根目录）
+  collection: knowledge_articles  # Chroma collection 名称
+  chroma-url: http://localhost:8000  # Chroma 服务地址
+  top-k: 4  # 检索返回条数
+  similarity-threshold: 0.15  # 相似度阈值（1 - L2距离，即 distance≤0.85 视为相关；实测孤独感文档 0.80 距离若用 0.3 会被误过滤）
+  scan-interval-ms: 60000  # 文件变更扫描间隔（M3 增量同步使用，测试期间曾临时调为 10000）
+  router-model-enabled: true  # 规则层未命中时是否启用模型层兜底判断
+  router-keywords: 焦虑,抑郁,内耗,孤独,自卑,压力,失眠,睡眠,正念,冥想,拖延,完美主义,自我接纳,拒绝,人际,社交,情绪,症状,病因,原因,治疗,缓解,改善,克服,应对,方法,技巧,怎么办,如何,怎么,什么是,是什么,为什么
+

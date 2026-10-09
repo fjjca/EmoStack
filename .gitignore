@@ -1,0 +1,21 @@
+# ==== 依赖与构建产物 ====
+node_modules/
+target/
+dist/
+*.log
+*.tmp
+*.class
+.DS_Store
+
+# ==== IDE ====
+.idea/
+.vscode/
+*.iml
+
+# ==== 敏感配置（真实密钥不入库，以 application-example.yml 为模板）====
+backend/src/main/resources/application*.yml
+!backend/src/main/resources/application-example.yml
+
+# ==== 环境变量文件 ====
+.env
+.env.*
